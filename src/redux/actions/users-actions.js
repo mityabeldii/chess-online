@@ -1,4 +1,6 @@
 /*eslint-disable*/
+import firebase from 'firebase'
+
 import * as types from '../action-types'
 import UsersAPI from '../../api/users-api';
 
@@ -23,10 +25,9 @@ let onLoginFailed = (error) => {
 
 //thunk
 export function logIn(data) {
-    console.log('distpatched logIn: data = ', data);
     return (dispatch, getState) => {
         dispatch(startLoggingIn());
-        return UsersAPI.parselessLogin(data.email, data.password, data.rememberMe).then(
+        return UsersAPI.parselessLogin(data).then(
             user => dispatch(onLoggedIn(user)),
             error => dispatch(onLoginFailed(error))
         )
@@ -53,10 +54,10 @@ let onSignUpFail = (error) => {
 }
 
 //thunk
-export function signUp(data) {
+export function signUp(email, password) {
     return (dispatch, getState) => {
         dispatch(startSigningUp())
-        return UsersAPI.parselessSignup(data).then(
+        return UsersAPI.parselessSignup(email, password).then(
             user => dispatch(onSignedUp(user)),
             error => dispatch(onSignUpFail(error))
         )
@@ -65,7 +66,6 @@ export function signUp(data) {
 
 //LOGOUT
 let startLoggingOut = () => {
-    console.log('startLoggingOut occured');
     return {
         type: types.LOGOUT
     }
@@ -85,7 +85,6 @@ let onLoggedOut = () => {
 export function logOut() {
     return (dispatch, getState) => {
         var usersState = getState().users;
-        console.log('usersState = ', usersState);
         if (usersState.currentUserId === undefined) {
             return Promise.resolve()
         }

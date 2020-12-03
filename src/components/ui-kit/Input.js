@@ -15,11 +15,15 @@ export default (props) => {
     useEffect(() => {
         let focusHandler = (event) => { setFocus(true) }
         let blurHandler = (event) => { setFocus(false) }
-        ref.current.addEventListener(`focus`, focusHandler, true);
-        ref.current.addEventListener(`blur`, blurHandler, true);
+        if (ref.current) {
+            ref.current.addEventListener(`focus`, focusHandler, true);
+            ref.current.addEventListener(`blur`, blurHandler, true);
+        }
         return (() => {
-            ref.current.removeEventListener(`focus`, focusHandler, true);
-            ref.current.removeEventListener(`blur`, blurHandler, true);
+            if (ref.current) {
+                ref.current.removeEventListener(`focus`, focusHandler, true);
+                ref.current.removeEventListener(`blur`, blurHandler, true);
+            }
         })
     }, [])
     let hasImage = props.image !== undefined

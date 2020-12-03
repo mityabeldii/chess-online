@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import {Map, Set} from 'immutable'
+import { Map, Set } from 'immutable'
 import * as types from '../action-types'
 
 const initialState = {
@@ -71,7 +71,6 @@ const UsersReducer = (state = initialState, action = {}) => {
             }
 
         // case types.INITIALIZE_AUTH_SUCCESS:
-        //     console.log(action);
         //     return {
         //         ...state,
         //         loading: false,

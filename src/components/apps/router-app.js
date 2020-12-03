@@ -3,6 +3,7 @@ import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { HashRouter, Switch, Route } from 'react-router-dom'
 import { useDispatch, useMappedState } from 'redux-react-hook';
+import firebase from 'firebase'
 
 import { Frame } from '../ui-kit/styled-templates'
 
@@ -21,12 +22,13 @@ let RouterApp = () => {
 
     useEffect(() => {
         dispatch(usersActions.initializeAuthorization()).then(pld => { if (pld.user !== undefined) { } });
+        dispatch(usersActions.loadAllUsers())
     }, []);
 
     let { userRole } = useCurrentUser()
 
     if (initialized === false) {
-        return <PagePreloader />
+        return <PreloaderPage/>
     }
 
     let route = GuestApp;
@@ -60,12 +62,13 @@ const Wrapper = styled.div`
     }
 `;
 
-const PagePreloader = styled(Frame)`
+const PreloaderPage = styled(Frame)`
     width: 100vw;
     height: 100vh;
     background: ${props => props.theme.background.primary};
+    color: white;
     &:after {
-        content: 'preloader';
+        content: 'loading';
     }
 `;
 

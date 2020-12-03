@@ -4,6 +4,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import firebase from 'firebase'
+
+import config from './constants/config'
+
+firebase.initializeApp(config);
+var db = firebase.firestore();
 
 var swapArrayElements = function (arr, indexA, indexB) {
   var temp = arr[indexA];

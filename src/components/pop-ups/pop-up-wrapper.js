@@ -42,7 +42,7 @@ const ChildrenWrapper = styled(Frame)`
 
 let Cross = styled.img.attrs(() => {
     let img
-    try { img = require(`../../../assets/images/cross_w.svg`) } catch (error) { }
+    try { img = require(`../../assets/images/cross_w.svg`) } catch (error) { }
     return ({ src: img, })
 })`
     width: 24px;

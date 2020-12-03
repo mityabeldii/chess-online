@@ -1,3 +1,4 @@
+/*eslint-disable*/
 const firebaseConfig = {
     apiKey: "AIzaSyAfjNY6CyCBZlJk8m7bnD681ckPT_Xcl1g",
     authDomain: "chess-online-dfa77.firebaseapp.com",
@@ -8,3 +9,6 @@ const firebaseConfig = {
     appId: "1:25746525180:web:5f8ff0a8ccc00c4f4e4079",
     measurementId: "G-YTV2RNSZT6"
 };
+
+export default firebaseConfig;
+/*eslint-enable*/

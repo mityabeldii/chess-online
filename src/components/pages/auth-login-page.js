@@ -1,17 +1,44 @@
 /*eslint-disable*/
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useDispatch } from 'redux-react-hook'
+import firebase from 'firebase'
 
-import { Frame } from '../ui-kit/styled-templates'
+import * as usersActions from '../../redux/actions/users-actions'
+
+import { Frame, Button, Link, P } from '../ui-kit/styled-templates'
 import Form from '../ui-kit/Form'
+import CommonHelper from '../../helpers/CommonHelper'
+
+let LoginFields = [
+    { name: `Email`, type: `string` },
+    { name: `Password`, type: `password` },
+]
 
 let LoginPage = () => {
+
+    let [tempData, setTempData] = useState({})
+    let dispatch = useDispatch()
+
+    let onLogin = () => {
+        dispatch(usersActions.logIn({ ...tempData, rememberMe: true }))
+            .then(pld => {
+                // CommonHelper.linkTo(`/`)
+                if (pld.error !== undefined) {
+                    window.alert(pld.error.message);
+                }
+            })
+    }
+
     return (
         <Wrapper>
             <Form
-                fields={{}}
-                onChange={(key, value) => { }}
+                fields={LoginFields}
+                data={tempData}
+                onChange={(key, value) => { setTempData({ ...tempData, [key]: value }) }}
             />
+            <Button extra={`width: 540px; margin-top: 30px; @media only screen and (max-width: 600px) { width: 90vw; margin-bottom: 5vw; }`} background={props => props.theme.green} onClick={onLogin} >Login</Button>
+            <Link to={`/signup`} ><P extra={`margin-top: 15px;`} >Create new account</P></Link>
         </Wrapper>
     )
 }

@@ -30,6 +30,7 @@
     "eject": "react-scripts eject",
     "define": "node src/define.js",
     "commit": "git add . && git status -s && git commit -m `date '+%d.%m.%Y🌿%H:%M'` && git push",
+    "deploy": "firebase deploy --only hosting",
     "produce": "yarn define && yarn build && yarn deploy && yarn commit"
   },
   "eslintConfig": {

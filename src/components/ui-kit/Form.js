@@ -1,24 +1,10 @@
 /*eslint-disable*/
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { Frame, Text, Image, PopUp, Textarea, Input, Checkbox, P, convertHex } from './styled-templates'
-import Dropzone from './Dropzone'
-import Button from './Button'
-import DatePicker from './DatePicker'
-import mvConsts from '../../constants/mvConsts';
+import { Frame, Text, Textarea, Input, Checkbox } from './styled-templates'
 import moment from 'moment'
-import axios from 'axios';
 import InputMask from 'react-input-mask';
-import { Editor } from '@tinymce/tinymce-react';
 import Select from 'react-select'
-import { makeAnimated } from 'react-select';
-import TagsInput from './TagsInput'
-
-import useDictionary from '../hooks/useDictionary'
-
-let animatedComponents = makeAnimated();
-
-let { min, max } = Math
 
 let validateDate = (date) => {
     date = date.split(`.`)
@@ -31,7 +17,6 @@ let validateDate = (date) => {
 let Form = (props) => {
 
     let { fields = [], onChange = () => { }, data = {}, editable = true, extra = `` } = props
-    let { getText, dict, lang } = useDictionary()
 
     return (
         <Wrapper extra={extra} >
@@ -48,51 +33,27 @@ let Form = (props) => {
                         case `string`:
                         case `number`:
                             return <Field key={index} >
-                                <Input {...item} value={data ? data[key] || `` : ``} onChange={e => { onChange(key, e.target.value) }} placeholder={getText(item.name)} />
+                                <Input {...item} value={data ? data[key] || `` : ``} onChange={e => { onChange(key, e.target.value) }} placeholder={item.name} />
                             </Field>
                         case `password`:
                             return <Field key={index} >
-                                <Input value={data ? data[key] || `` : ``} type={`password`} onChange={e => { onChange(key, e.target.value) }} short={item.short} extra={item.extra} placeholder={getText(item.name) || `Password`} />
+                                <Input value={data ? data[key] || `` : ``} type={`password`} onChange={e => { onChange(key, e.target.value) }} short={item.short} extra={item.extra} placeholder={item.name || `Password`} />
                             </Field>
                         case `date`:
                             return <Field key={index} >
-                                <InputMask mask="99.99.9999" value={data ? data[key] || `` : ``} onChange={e => { onChange(key, validateDate(e.target.value)) }} short={item.short} extra={item.extra} placeholder={getText(item.name)} pattern={`[0-9]*`} >
+                                <InputMask mask="99.99.9999" value={data ? data[key] || `` : ``} onChange={e => { onChange(key, validateDate(e.target.value)) }} short={item.short} extra={item.extra} placeholder={item.name} pattern={`[0-9]*`} >
                                     {(props) => <Input number {...props} />}
                                 </InputMask>
                             </Field>
                         case `phone`:
                             return <Field key={index} >
-                                <InputMask mask="+370 99 999 999" value={data ? data[key] || `` : ``} onChange={e => { onChange(key, e.target.value) }} short={item.short} extra={item.extra} placeholder={getText(item.name)} pattern={`[0-9]*`} >
+                                <InputMask mask="+370 99 999 999" value={data ? data[key] || `` : ``} onChange={e => { onChange(key, e.target.value) }} short={item.short} extra={item.extra} placeholder={item.name} pattern={`[0-9]*`} >
                                     {(props) => <Input {...props} />}
                                 </InputMask>
                             </Field>
                         case `textarea`:
                             return <Field key={index} >
-                                <Textarea value={data ? data[key] || `` : ``} onChange={e => { onChange(key, e.target.value) }} short={item.short} extra={item.extra} placeholder={getText(item.name)} />
-                            </Field>
-                        case `wysiwyg`:
-                            return <Field key={index} >
-                                <Label>{getText(item.name)}</Label>
-                                <Editor
-                                    initialValue={data ? data[key] || `` : ``}
-                                    apiKey={`u3254i8i3jcmyci068mjgrh4rjpeulx7epdcv5bevx54sjyq`}
-                                    init={{
-                                        height: 500,
-                                        menubar: false,
-                                        branding: false,
-                                        plugins: [
-                                            'advlist autolink lists link image charmap print preview anchor',
-                                            'searchreplace visualblocks code fullscreen',
-                                            'insertdatetime media table paste code help wordcount',
-                                            `media`
-                                        ],
-                                        toolbar:
-                                            'undo redo | formatselect | bold italic backcolor | \
-                                            alignleft aligncenter alignright alignjustify | \
-                                            bullist numlist outdent indent | removeformat | help | media',
-                                    }}
-                                    onEditorChange={e => { onChange(key, e) }}
-                                />
+                                <Textarea value={data ? data[key] || `` : ``} onChange={e => { onChange(key, e.target.value) }} short={item.short} extra={item.extra} placeholder={item.name} />
                             </Field>
                         case `select`:
                             return <Field key={index} >
@@ -100,41 +61,17 @@ let Form = (props) => {
                                     {...item}
                                     value={data[key] && data[key].value ? data[key] : null}
                                     options={item.options || []}
-                                    placeholder={getText(item.name)}
+                                    placeholder={item.name}
                                     onChange={e => { onChange(key, e ? e.value : e) }}
-                                />
-                            </Field>
-                        case `tagsinput`:
-                            return <Field key={index} >
-                                <TagsInput
-                                    tagsArray={Object.keys(dict).filter(i => i.indexOf(`tag_`) > -1)}
-                                    selectedTagsArray={data ? data[key] || [] : []}
-                                    onChange={e => { onChange(key, e) }}
                                 />
                             </Field>
                         case `checkbox`:
                             return <Field key={index} row >
                                 <Checkbox
                                     checked={data[key] === true}
-                                    onChange={e => { onChange(key, data[key] !== true) }}
+                                    onChange={() => { onChange(key, data[key] !== true) }}
                                 />
-                                <Text extra={`margin-left: 15px; font-size: 16px; margin-bottom: 0px;`} >{getText(item.name)}</Text>
-                            </Field>
-                        case `multicheck`:
-                            return <Field key={index} >
-                                {
-                                    item.options.map((option, option_i) => {
-                                        return (
-                                            <Frame key={option_i} row extra={`margin-bottom: 10px;`} >
-                                                <Checkbox
-                                                    checked={(data[key] || []).indexOf(option.id) > -1}
-                                                    onChange={e => { onChange(key, [...(data[key] || []), option.id].filter((item, index, self) => self.filter(a => a === item).length === 1)) }}
-                                                />
-                                                <Text extra={`margin-left: 15px; font-size: 16px; margin-bottom: 0px;`} >{option[lang.toLowerCase()]}</Text>
-                                            </Frame>
-                                        )
-                                    })
-                                }
+                                <Text extra={`margin-left: 15px; font-size: 16px; margin-bottom: 0px;`} >{item.name}</Text>
                             </Field>
                         case `custom`:
                             return <Field key={index} >
@@ -152,7 +89,6 @@ const MySelect = styled(Select).attrs((props) => {
     return ({
         defaultValue: [],
         closeMenuOnSelect: true,
-        components: animatedComponents,
         isClearable: props.isClearable === true,
         styles: {
             singleValue: style => ({ ...style, color: props.theme.text.primary, marginLeft: `12px`, }),
@@ -168,7 +104,7 @@ const MySelect = styled(Select).attrs((props) => {
                 ':hover': null,
                 ...props.extra
             }),
-            menuList: style => ({ borderRadius: `12px`, }),
+            menuList: () => ({ borderRadius: `12px`, }),
             placeholder: style => ({ ...style, marginLeft: `12px`, color: props.theme.text.secondary, fontSize: `14px`, }),
             input: style => ({ ...style, marginLeft: `12px`, fontSize: `14px`, }),
             valueContainer: style => ({ ...style, fontSize: `14px`, color: props.theme.text.secondary, margineft: `12px`, }),
