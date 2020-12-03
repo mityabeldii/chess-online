@@ -50,7 +50,11 @@ let RouterApp = () => {
 }
 
 const Wrapper = styled.div`
-    background: ${props => props.theme.background.primary};
+    width: 100vw;
+    min-height: 100vh;
+    * {
+        color: ${props => props.theme.text.primary};
+    }
     @media only screen and (max-width: 600px) {
         
     }

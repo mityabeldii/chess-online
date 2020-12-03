@@ -8,25 +8,23 @@ let additional = {
 }
 
 let basePalette = {
-
-    red: `#FE7563`,
+    red: `#F86D3F`,
     yellow: `#FDCA21`,
-    green: `#5CC956`,
-    blue: `#578AD6`,
-    rtu_green: `#005551`,
+    green: `#78BA75`,
+    purple: `#6350CC`,
 }
 
 export let theme = {
     ...basePalette,
     ...additional,
     background: {
-        primary: `#ffffff`,
-        secondary: `#EEEEEE`,
-        support: `#d5d5d5`,
+        primary: `#1A1A21`,
+        secondary: `#1E222C`,
+        support: `#D5D5D5`,
     },
     text: {
-        primary: `#374A5E`,
-        secondary: `#767676`,
+        primary: `#FFFFFF`,
+        secondary: `#62646A`,
         support: `#939393`,
     }
 }

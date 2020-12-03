@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.0",
     "components": "^0.1.0",
+    "firebase": "^8.1.1",
     "immutable": "^4.0.0-rc.12",
     "moment-timezone": "^0.5.32",
     "react": "^17.0.1",

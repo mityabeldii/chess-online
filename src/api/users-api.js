@@ -1,12 +1,24 @@
 /*eslint-disable*/
+import firebase from 'firebase'
 
 let UsersAPI = {
-    parselessLogin: async () => {
-        return await (() => { setTimeout(() => { return null }, 1000) })
+    parselessLogin: async (email, password) => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((user) => {
+                console.log(user);
+                return user
+            })
+            .catch((error) => { console.log(error); });
     },
 
-    parselessSignup: async () => {
-        return await (() => { setTimeout(() => { return null }, 1000) })
+    parselessSignup: async (email, password) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((user) => {
+                console.log(user);
+                return user
+            })
+            .catch((error) => { console.log(error); });
+
     },
 
     parselessLogout: async () => {

@@ -1,13 +1,58 @@
+html {
+    background: #1A1A21;
+}
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-family: Regular;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+input {
+    font-family: Regular;
+}
+
+textarea {
+    font-family: Regular;
+}
+
+@font-face {
+    font-family: Bold;
+    src: url('./assets/fonts/Poppins-SemiBold.ttf');
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Regular;
+    src: url('./assets/fonts/Poppins-Medium.ttf');
+    font-style: normal;
 }

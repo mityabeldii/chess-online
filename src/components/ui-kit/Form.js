@@ -5,7 +5,6 @@ import { Frame, Text, Image, PopUp, Textarea, Input, Checkbox, P, convertHex } f
 import Dropzone from './Dropzone'
 import Button from './Button'
 import DatePicker from './DatePicker'
-import Selector from './Selector'
 import mvConsts from '../../constants/mvConsts';
 import moment from 'moment'
 import axios from 'axios';
