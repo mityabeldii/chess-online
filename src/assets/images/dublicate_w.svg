@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="main" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;fill-opacity:0;}
+	.st1{fill:#FFFFFF;}
+</style>
+<title>dublicate</title>
+<rect id="frame" class="st0" width="1000" height="1000"/>
+<path class="st1" d="M654,150H178c-15.5,0-28,12.5-28,28v476c0,15.5,12.5,28,28,28h476c15.5,0,28-12.5,28-28V178
+	C682,162.5,669.5,150,654,150z M626,626H206V206h420V626z"/>
+<path class="st1" d="M794,724v70h-70v56h98c15.5,0,28-12.5,28-28v-98H794z"/>
+<rect x="508.7" y="794" class="st1" width="150.6" height="56"/>
+<path class="st1" d="M374,794v-70h-56v98c0,15.5,12.5,28,28,28h98v-56H374z"/>
+<path class="st1" d="M822,318h-98v56h70v70h56v-98C850,330.5,837.5,318,822,318z"/>
+<rect x="794" y="508.7" class="st1" width="56" height="150.6"/>
+</svg>

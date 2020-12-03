@@ -1,28 +1,23 @@
 /*eslint-disable*/
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { reducer } from './redux/reducers'
+import { default as ReduxThunk } from 'redux-thunk';
+import RouterApp from './components/apps/router-app';
+import { ThemeWrapper } from './components/ui-kit/styled-templates'
+import { StoreContext } from 'redux-react-hook';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const store = createStore(reducer, undefined, compose(applyMiddleware(ReduxThunk)))
+
+let App = (props) => {
+    return (
+        <StoreContext.Provider value={store}>
+            <ThemeWrapper>
+                <RouterApp />
+            </ThemeWrapper>
+        </StoreContext.Provider>
+    )
 }
 
 export default App;
-
 /*eslint-enable*/
