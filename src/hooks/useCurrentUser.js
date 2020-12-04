@@ -18,7 +18,7 @@ let useCurrentUser = () => {
             isAdmin: userRole === `admin`,
             logOut: async () => {
                 await dispatch(usersActions.logOut());
-                // CommonHelper.linkTo(`/`)
+                CommonHelper.linkTo(`/`)
                 // window.location.reload();
             },
             updateUser: async (info) => state.users.currentUserId ? await dispatch(usersActions.updateUser({ info: { ...info }, id: state.users.currentUserId })) : () => { },

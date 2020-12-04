@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     box-sizing: border-box;
     padding: 23px 30px 23px 30px;
     height: 16px;
-    border-radius: 50px;
+    border-radius: 12px;
     font-family: bold;
     font-size: 16px;
     background: black;

@@ -9,7 +9,7 @@ let LandingPage = () => {
         <Wrapper>
             <Frame row extra={`> * { &:nth-child(1) { margin-right: 10px; }; };`} >
                 <Link to={`/login`} ><Button background={props => props.theme.green} >Login</Button></Link>
-                <Link to={`/signup`} ><Button background={props => props.theme.green} >Sign up</Button></Link>
+                <Link to={`/signup`} ><Button shaped background={props => props.theme.green} >Sign up</Button></Link>
             </Frame>
         </Wrapper>
     )
