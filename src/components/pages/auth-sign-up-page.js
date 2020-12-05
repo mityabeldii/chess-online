@@ -13,6 +13,7 @@ let fields = [
     // { name: `Name`, type: `string`, short: true },
     // { name: `Last name`, type: `string`, short: true },
     { name: `Email`, type: `string` },
+    { name: `Username`, type: `string` },
     { name: `Create password`, type: `password`, short: true, },
     { name: `Confirm password`, type: `password`, short: true, },
 ]
@@ -49,6 +50,11 @@ let SignUpPage = () => {
         if (tempData.create_password !== tempData.confirm_password) {
             window.dispatchEvent(new CustomEvent(`CALL_INPUT_ERROR`, { detail: `Confirm password` }))
             setTimeout(() => { window.alert(`Password doesn't match`) }, 200)
+            return
+        }
+        if (tempData.username === undefined || tempData.username === ``) {
+            window.dispatchEvent(new CustomEvent(`CALL_INPUT_ERROR`, { detail: `Username` }))
+            setTimeout(() => { window.alert(`Username is empty`) }, 200)
             return
         }
         dispatch(usersActions.signUp({ ...tempData, rememberMe: true })).then(pld => {

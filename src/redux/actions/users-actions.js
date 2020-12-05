@@ -54,10 +54,10 @@ let onSignUpFail = (error) => {
 }
 
 //thunk
-export function signUp(email, password) {
+export function signUp(data) {
     return (dispatch, getState) => {
         dispatch(startSigningUp())
-        return UsersAPI.parselessSignup(email, password).then(
+        return UsersAPI.parselessSignup(data).then(
             user => dispatch(onSignedUp(user)),
             error => dispatch(onSignUpFail(error))
         )
@@ -156,7 +156,6 @@ export function loadUsersByIds(ids) {
         )
     }
 }
-
 
 // update user
 

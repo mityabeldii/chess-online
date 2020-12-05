@@ -21,10 +21,12 @@ let UsersAPI = {
         return new Promise((resolve, reject) => {
             firebase.auth().createUserWithEmailAndPassword(data.email, data.create_password)
                 .then((d) => {
-                    let user = { email: d.user.email, id: d.user.uid, userRole: `user` }
-                    firebase.database().ref(`users/${user.id}`).set(user)
+                    delete data.create_password
+                    delete data.confirm_password
+                    delete data.rememberMe
+                    firebase.database().ref(`users/${d.user.uid}`).set({ ...data, id: d.user.uid, userRole: `user` })
                         .then(() => {
-                            resolve(user)
+                            resolve({ ...data, id: d.user.uid, userRole: `user` })
                         })
                 })
                 .catch((d) => { reject(d) })
@@ -63,9 +65,10 @@ let UsersAPI = {
     },
 
     getAllUsers: async () => {
-        var rootRef = firebase.database().ref();
         return new Promise((resolve, reject) => {
-            resolve([])
+            firebase.database().ref(`users`).once('value')
+                .then((d) => { resolve(Object.values(d.val())) })
+                .catch((d) => { reject(d) })
         })
     },
 

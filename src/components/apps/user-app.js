@@ -1,11 +1,13 @@
 /*eslint-disable*/
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Switch, Route, useLocation } from 'react-router-dom'
+import { useMappedState } from 'redux-react-hook'
 
 import { Frame, Button, Link, convertHex, P } from '../ui-kit/styled-templates'
 import SinglePlayer from '../pages/single-player'
 import Multiplayer from '../pages/multiplayer'
+import HistoryPage from '../pages/history-page'
 
 import useCurrentUser from '../../hooks/useCurrentUser'
 
@@ -19,8 +21,8 @@ let menu_items = [
         link: '/multiplayer',
     },
     {
-        label: 'Settings',
-        link: '/settings',
+        label: 'History',
+        link: '/history',
     },
 ]
 
@@ -28,6 +30,7 @@ let UserApp = () => {
 
     let path = useLocation()
     let { currentUser, logOut } = useCurrentUser()
+    let { users } = useMappedState(useCallback((state) => ({ users: state.users.usersMap.toArray() }), []))
 
     return (
         <Wrapper>
@@ -49,6 +52,11 @@ let UserApp = () => {
                 </Body>
                 <Body>
                     <MenuTitle>Players online</MenuTitle>
+                    {users.map((item, index) => {
+                        return (
+                            <MenuTitle key={index} >{item.username}</MenuTitle>
+                        )
+                    })}
                 </Body>
                 <Footer>
                     <Button shaped background={convertHex(`#ffffff`, 0.3)} extra={`width: 220px !important;`} onClick={logOut} >Log out</Button>
@@ -58,6 +66,7 @@ let UserApp = () => {
                 <Switch>
                     <Route exact path={`/single_player`} component={SinglePlayer} />
                     <Route exact path={`/multiplayer`} component={Multiplayer} />
+                    <Route exact path={`/history`} component={HistoryPage} />
                 </Switch>
             </Workspace>
         </Wrapper>
