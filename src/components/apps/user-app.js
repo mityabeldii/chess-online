@@ -118,7 +118,9 @@ const Menu = styled(Frame)`
     }
 
     @media only screen and (max-width: 600px) {
-        width: 90vw;    
+        width: 100vw;
+        position: fixed;
+        transform: translateX(-100%);
     }
 `;
 
@@ -135,7 +137,8 @@ const Workspace = styled(Frame)`
     }
 
     @media only screen and (max-width: 600px) {
-        width: 0vw;    
+        width: 0vw;
+        width: 90vw;  
     }
 `;
 
@@ -145,6 +148,10 @@ const Wrapper = styled(Frame)`
     flex-direction: row;
     * {
         /* border: 1px solid red; */
+    }
+
+    @media only screen and (max-width: 600px) {
+        flex-direction: column;
     }
 `;
 

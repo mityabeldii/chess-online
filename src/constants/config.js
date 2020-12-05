@@ -1,13 +1,12 @@
 /*eslint-disable*/
 const firebaseConfig = {
-    apiKey: "AIzaSyAfjNY6CyCBZlJk8m7bnD681ckPT_Xcl1g",
-    authDomain: "chess-online-dfa77.firebaseapp.com",
-    databaseURL: "https://chess-online-dfa77.firebaseio.com",
-    projectId: "chess-online-dfa77",
-    storageBucket: "chess-online-dfa77.appspot.com",
-    messagingSenderId: "25746525180",
-    appId: "1:25746525180:web:5f8ff0a8ccc00c4f4e4079",
-    measurementId: "G-YTV2RNSZT6"
+    apiKey: "AIzaSyA_sxGY2zYkQNke1p_i0GswfzdTttqJXmw",
+    authDomain: "tik-toe-toy-online-d475f.firebaseapp.com",
+    databaseURL: "https://tik-toe-toy-online-d475f-default-rtdb.firebaseio.com",
+    projectId: "tik-toe-toy-online-d475f",
+    storageBucket: "tik-toe-toy-online-d475f.appspot.com",
+    messagingSenderId: "777142709065",
+    appId: "1:777142709065:web:3ad522ccc86138ea1e0898"
 };
 
 export default firebaseConfig;
