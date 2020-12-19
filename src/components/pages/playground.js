@@ -37,7 +37,7 @@ let Playground = (props) => {
 
     let { users } = useMappedState(useCallback((state) => ({ users: state.users.usersMap.toArray() }), []))
     let { currentUser } = useCurrentUser()
-
+    
     let active_player = config.filter(i => i !== `-`).length % 2
     let my_turn = game[`player_${active_player + 1}`] === currentUser.id
 

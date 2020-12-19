@@ -21,7 +21,22 @@ let win_strics = [
     [2, 4, 6],
 ]
 
-let SinglePlayer = () => {
+let useDebounce = (value, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+    useEffect(
+        () => {
+            const handler = setTimeout(() => { setDebouncedValue(value) }, delay);
+            return () => {
+                clearTimeout(handler);
+            };
+        },
+        [value, delay]
+    );
+
+    return debouncedValue;
+}
+
+let MultiPlayer = () => {
 
     let [game, setGame] = useState({ config: [] })
     let { currentUser } = useCurrentUser()
@@ -49,7 +64,7 @@ let SinglePlayer = () => {
             }
         } else {
             if (winner === undefined) {
-                
+
             } else {
                 setTimeout(() => {
                     firebase.database().ref(`games/${game.id}`).set({ ...game, config: game.config.join(``), winner: game[`player_${active_player === 0 ? 2 : 1}`], status: `ended`, })
@@ -59,13 +74,18 @@ let SinglePlayer = () => {
     }, [game])
 
     useEffect(() => {
+
         let id = window.createId()
         firebase.database().ref(`games`).once('value', (snapshot) => {
-            let games = (Object.values(snapshot.val() || {}) || []).filter(i => i.player_1 !== currentUser.id && i.player_2 === `search`)
+            Object.values(snapshot.val() || {}).filter(i => i.player_1 === currentUser.id || i.player_2 === currentUser.id).filter(i => i.status !== `ended`).forEach(i => {
+                firebase.database().ref(`games/${i.id}/status`).set(`ended`)
+            })
+            let games = (Object.values(snapshot.val() || {}) || []).filter(i => i.player_1 !== currentUser.id && i.player_2 === `search` && i.timestamp - +moment() < 1000 * 10)
             if (games.length > 0) {
                 firebase.database().ref(`games/${games[0].id}/status`).set(`playing`)
                 firebase.database().ref(`games/${games[0].id}/player_2`).set(currentUser.id)
                 firebase.database().ref(`games/${games[0].id}`).on('value', (snapshot) => {
+                    if (snapshot.val() === null) { return }
                     setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
                 });
             } else {
@@ -77,11 +97,17 @@ let SinglePlayer = () => {
                     id: id,
                     timestamp: +moment(),
                 }
-                firebase.database().ref(`games/${id}`).set(new_game).then((d) => {
-                    setGame({ ...new_game, config: new_game.config.split(``) })
-                })
+                firebase.database().ref(`games/${id}`).set(new_game)
                 firebase.database().ref(`games/${id}`).on('value', (snapshot) => {
-                    setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
+                    if (snapshot.val() == null) {
+                        window.alert(`This game was deleted`)
+                        CommonHelper.linkTo(`/`)
+                    } else {
+                        if (snapshot.val().status === `ended`) {
+                            CommonHelper.linkTo('/')
+                        }
+                        setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
+                    }
                 });
             }
         });
@@ -90,10 +116,24 @@ let SinglePlayer = () => {
     useEffect(() => {
         return (() => {
             if (game.id !== undefined) {
-                firebase.database().ref(`games/${game.id}/status`).set(`ended`)
+                firebase.database().ref(`games/${game.id}`).once('value').then((d) => {
+                    if (d.val() !== null) {
+                        firebase.database().ref(`games/${game.id}/status`).set(`ended`)
+                    }
+                })
             }
         })
     }, [game.id])
+
+    let debouncedSearchTerm = useDebounce(game, 1000 * 15);
+
+    useEffect(() => {
+        if (moment().diff(moment(game.timestamp), `seconds`) >= 15) {
+            CommonHelper.linkTo(`/`)
+            window.alert(`Timeout`)
+        }
+    }, [debouncedSearchTerm])
+
 
     if (game.player_2 === 'search') {
         return (
@@ -117,5 +157,5 @@ const Wrapper = styled(Frame)`
     height: 100%;
 `;
 
-export default SinglePlayer;
+export default MultiPlayer;
 /*eslint-enable*/

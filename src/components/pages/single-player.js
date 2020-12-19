@@ -40,7 +40,7 @@ let SinglePlayer = () => {
                 let index = items[Math.floor(Math.random() * items.length)]
                 config[index] = active_player + ``
                 setTimeout(() => {
-                    firebase.database().ref(`games/${game.id}`).set({ ...game, config: config.join(``) })
+                    firebase.database().ref(`games/${game.id}`).set({ ...game, config: config.join(``), timestamp: +moment() })
                 }, 1000)
             } else {
                 setTimeout(() => {
@@ -53,7 +53,11 @@ let SinglePlayer = () => {
     useEffect(() => {
         return (() => {
             if (game.id !== undefined) {
-                firebase.database().ref(`games/${game.id}/status`).set(`ended`)
+                firebase.database().ref(`games/${game.id}`).once('value').then((d) => {
+                    if (d.val() !== null) {
+                        firebase.database().ref(`games/${game.id}/status`).set(`ended`)
+                    }
+                })
             }
         })
     }, [game.id])
@@ -72,14 +76,22 @@ let SinglePlayer = () => {
             setGame({ ...new_game, config: new_game.config.split(``) })
         })
         firebase.database().ref(`games/${id}`).on('value', (snapshot) => {
-            setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
+            if (snapshot.val() == null) {
+                window.alert(`This game was deleted`)
+                CommonHelper.linkTo(`/`)
+            } else {
+                if (snapshot.val().status === `ended`) {
+                    CommonHelper.linkTo('/')
+                }
+                setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
+            }
         });
     }, [])
 
     return (
         <Wrapper>
             <Playground game={game} onChange={(new_config) => {
-                firebase.database().ref(`games/${game.id}`).set({ ...game, config: new_config.join(``) })
+                firebase.database().ref(`games/${game.id}`).set({ ...game, config: new_config.join(``), timestamp: +moment() })
             }} />
         </Wrapper>
     )
