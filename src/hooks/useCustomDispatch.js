@@ -10,5 +10,9 @@ let useCustomDispatch = (key, handler) => {
     })
 }
 
+export let customHandler = (key, detail) => {
+    window.dispatchEvent(new CustomEvent(key, { detail }))
+}
+
 export default useCustomDispatch;
 /*eslint-enable*/

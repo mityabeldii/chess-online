@@ -1,16 +1,21 @@
 /*eslint-disable*/
-import React, { useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { Switch, Route, useLocation } from 'react-router-dom'
 import { useMappedState } from 'redux-react-hook'
+import firebase from 'firebase'
+import moment from 'moment-timezone'
 
 import { Frame, Button, Link, convertHex, P } from '../ui-kit/styled-templates'
 import SinglePlayer from '../pages/single-player'
 import Multiplayer from '../pages/multiplayer'
 import HistoryPage from '../pages/history-page'
 import DocsPage from '../pages/docs-page'
+import UsersPage from '../pages/users-page'
+import InvitePopUp from '../pop-ups/invite-pop-up'
 
 import useCurrentUser from '../../hooks/useCurrentUser'
+import { customHandler } from '../../hooks/useCustomDispatch'
 
 let menu_items = [
     {
@@ -26,6 +31,10 @@ let menu_items = [
     //     link: '/history',
     // },
     {
+        label: 'Users',
+        link: '/users',
+    },
+    {
         label: 'Docs',
         link: '/docs',
     },
@@ -37,8 +46,21 @@ let UserApp = () => {
     let { currentUser, logOut } = useCurrentUser()
     let { users } = useMappedState(useCallback((state) => ({ users: state.users.usersMap.toArray() }), []))
 
+    useEffect(() => { firebase.database().ref(`users/${currentUser.id}/timestamp`).set(+moment()) }, [path])
+
+    useEffect(() => {
+        firebase.database().ref(`games`).on('value', (snapshot) => {
+            let games = Object.values(snapshot.val() || [])
+            let invitation = games.filter(i => i.status === `waiting` && i.player_2 === currentUser.id)[0]
+            if (invitation) {
+                customHandler(`OPEN_INVITE_POP_UP`, { invitor: invitation.player_1, game_id: invitation.id })
+            }
+        })
+    }, [])
+
     return (
         <Wrapper>
+            <InvitePopUp />
             <Menu>
                 <Link to={`/`} ><Header>tic tac toe</Header></Link>
                 <Body>
@@ -64,6 +86,9 @@ let UserApp = () => {
                     })} */}
                 </Body>
                 <Footer>
+                    <Button shaped background={convertHex(`#ffffff`, 0.3)} extra={`width: 220px !important; margin-bottom: 15px;`} onClick={() => { window.open(`https://github.com/Nymaxxx/tik-toe-toy-online`) }} >
+                        GitHub
+                    </Button>
                     <Button shaped background={convertHex(`#ffffff`, 0.3)} extra={`width: 220px !important;`} onClick={logOut} >Log out</Button>
                 </Footer>
             </Menu>
@@ -71,13 +96,21 @@ let UserApp = () => {
                 <Switch>
                     <Route exact path={`/single_player`} component={SinglePlayer} />
                     <Route exact path={`/multiplayer`} component={Multiplayer} />
+                    <Route exact path={`/multiplayer/:game_id`} component={Multiplayer} />
                     {/* <Route exact path={`/history`} component={HistoryPage} /> */}
                     <Route exact path={`/docs`} component={DocsPage} />
+                    <Route exact path={`/users`} component={UsersPage} />
                 </Switch>
             </Workspace>
         </Wrapper>
     )
 }
+
+const GitHub = styled(Frame)`
+    width: 30px;
+    height: 30px;
+    background: url("${() => require(`../../assets/images/github.svg`).default}") no-repeat center center;
+`;
 
 const MenuTitle = styled(Frame)`
     width: 100%;

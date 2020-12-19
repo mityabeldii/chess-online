@@ -2,13 +2,16 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import firebase from 'firebase'
+import { useLocation } from 'react-router-dom'
 import moment from 'moment-timezone'
 
 import { Frame, Button, Link, convertHex } from '../ui-kit/styled-templates'
 import Playground from './playground'
 
-import useCurrentUser from '../../hooks/useCurrentUser'
 import CommonHelper from '../../helpers/CommonHelper'
+
+import useCurrentUser from '../../hooks/useCurrentUser'
+import useDebounce from '../../hooks/useDebounce'
 
 let win_strics = [
     [0, 1, 2],
@@ -21,26 +24,22 @@ let win_strics = [
     [2, 4, 6],
 ]
 
-let useDebounce = (value, delay) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-    useEffect(
-        () => {
-            const handler = setTimeout(() => { setDebouncedValue(value) }, delay);
-            return () => {
-                clearTimeout(handler);
-            };
-        },
-        [value, delay]
-    );
-
-    return debouncedValue;
-}
-
 let MultiPlayer = () => {
 
+    let path = useLocation().pathname.split(`/`).slice(1)
     let [game, setGame] = useState({ config: [] })
     let { currentUser } = useCurrentUser()
     let { config } = game
+
+    useEffect(() => {
+        if (path[1] !== undefined) {
+            firebase.database().ref(`games/${path[1]}`).once('value', (snapshot) => {
+                if (snapshot.val().player_1 === currentUser.id || snapshot.val().player_2 === currentUser.id) {
+                    setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
+                }
+            })
+        }
+    }, [path])
 
     let active_player = game.config.filter(i => i !== `-`).length % 2
 
@@ -74,12 +73,11 @@ let MultiPlayer = () => {
     }, [game])
 
     useEffect(() => {
-
         let id = window.createId()
         firebase.database().ref(`games`).once('value', (snapshot) => {
-            Object.values(snapshot.val() || {}).filter(i => i.player_1 === currentUser.id || i.player_2 === currentUser.id).filter(i => i.status !== `ended`).forEach(i => {
-                firebase.database().ref(`games/${i.id}/status`).set(`ended`)
-            })
+            // Object.values(snapshot.val() || {}).filter(i => i.player_1 === currentUser.id || i.player_2 === currentUser.id).filter(i => i.status !== `ended`).forEach(i => {
+            //     firebase.database().ref(`games/${i.id}/status`).set(`ended`)
+            // })
             let games = (Object.values(snapshot.val() || {}) || []).filter(i => i.player_1 !== currentUser.id && i.player_2 === `search` && i.timestamp - +moment() < 1000 * 10)
             if (games.length > 0) {
                 firebase.database().ref(`games/${games[0].id}/status`).set(`playing`)
@@ -103,9 +101,9 @@ let MultiPlayer = () => {
                         window.alert(`This game was deleted`)
                         CommonHelper.linkTo(`/`)
                     } else {
-                        if (snapshot.val().status === `ended`) {
-                            CommonHelper.linkTo('/')
-                        }
+                        // if (snapshot.val().status === `ended`) {
+                        //     CommonHelper.linkTo('/')
+                        // }
                         setGame({ ...snapshot.val(), config: snapshot.val().config.split(``) })
                     }
                 });
@@ -125,7 +123,7 @@ let MultiPlayer = () => {
         })
     }, [game.id])
 
-    let debouncedSearchTerm = useDebounce(game, 1000 * 15);
+    let debouncedSearchTerm = useDebounce(game.timestamp, 1000 * 15);
 
     useEffect(() => {
         if (moment().diff(moment(game.timestamp), `seconds`) >= 15) {
@@ -133,7 +131,6 @@ let MultiPlayer = () => {
             window.alert(`Timeout`)
         }
     }, [debouncedSearchTerm])
-
 
     if (game.player_2 === 'search') {
         return (
@@ -146,7 +143,7 @@ let MultiPlayer = () => {
     return (
         <Wrapper>
             <Playground game={game} onChange={(new_config) => {
-                firebase.database().ref(`games/${game.id}`).set({ ...game, config: new_config.join(``) })
+                firebase.database().ref(`games/${game.id}`).set({ ...game, config: new_config.join(``), timestamp: +moment() })
             }} />
         </Wrapper>
     )

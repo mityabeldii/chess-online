@@ -73,3 +73,8 @@ All firebase configs are in `src/constants/config.js`.
 
 To initialize firebase - you need to have a [`firebase-tools`](https://firebase.google.com/docs/cli#macos).
 We are using firebase hosting for this particular project.
+
+## Authors
+ - Gleb Trepalin
+ - Ivan Kalyagin
+ - Anastasia Mikheeva

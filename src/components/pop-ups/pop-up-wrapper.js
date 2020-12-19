@@ -42,7 +42,7 @@ const ChildrenWrapper = styled(Frame)`
 
 let Cross = styled.img.attrs(() => {
     let img
-    try { img = require(`../../assets/images/cross_w.svg`) } catch (error) { }
+    try { img = require(`../../assets/images/cross_w.svg`).default } catch (error) { }
     return ({ src: img, })
 })`
     width: 24px;
@@ -66,7 +66,8 @@ const OpenProjectTab = styled(Frame)`
     background: ${props => props.theme.background.primary};
     position: fixed;
     top: 50%;
-    transform: translateY(${props => props.visible ? `-50%` : `100vh`});
+    left: 50%;
+    transform: translateX(-50%) translateY(${props => props.visible ? `-50%` : `100vh`});
     z-index: 3;
     box-sizing: border-box;
 
