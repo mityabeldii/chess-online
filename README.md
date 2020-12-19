@@ -17,10 +17,7 @@ First, this is a `npm` project, so you need to have several command line tools:
  - [`yarn`](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
  - [`create-react-app`](https://create-react-app.dev/docs/getting-started/)
  - [`firebase-tools`](https://firebase.google.com/docs/cli#macos)
- 
-# How to run this project on local machine
 
-First you need to download this repo. Then go to the filder with this project and install all dependencies with `yarn install`.
 
 ## React
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
