@@ -47,9 +47,23 @@ let SinglePlayer = () => {
                     firebase.database().ref(`games/${game.id}`).set({ ...game, config: game.config.join(``), winner: game[`player_${active_player === 0 ? 2 : 1}`], status: `ended`, })
                 }, 1000)
             }
+            window.addEventListener("beforeunload", () => {
+                ev.preventDefault();
+                return () => {
+                    firebase.database().ref(`games/${game.id}`).set({ ...game, config: game.config.join(``), status: `ended`, })
+                }
+            })
+            return (() => {
+                window.removeEventListener("beforeunload", () => {
+                    ev.preventDefault();
+                    return () => {
+                        firebase.database().ref(`games/${game.id}`).set({ ...game, config: game.config.join(``), status: `ended`, })
+                    }
+                })
+            })
         } else {
             if (winner === undefined) {
-                
+
             } else {
                 setTimeout(() => {
                     firebase.database().ref(`games/${game.id}`).set({ ...game, config: game.config.join(``), winner: game[`player_${active_player === 0 ? 2 : 1}`], status: `ended`, })

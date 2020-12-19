@@ -15,7 +15,7 @@ let defineFolder = (folder_name = `./`) => {
             let contents = fs.readFileSync(folder_name + file_name, { encoding: 'utf8', flag: 'r' })
             if (contents.split(`\n`)[0] !== a) {
                 fs.writeFileSync(folder_name + file_name, a + `\n` + contents + `\n` + b)
-                console.log('\x1b[32m%s\x1b[0m', `changed --->`, clean(folder_name + file_name));
+                // console.log('\x1b[32m%s\x1b[0m', `changed --->`, clean(folder_name + file_name));
                 counter++
             }
             return
@@ -25,5 +25,5 @@ let defineFolder = (folder_name = `./`) => {
 }
 
 defineFolder(`./`)
-console.log('\x1b[33m%s\x1b[0m', `Done:`, `changed ${counter} files for ${(+new Date() - time_0) / 1000}s\n`);
+// console.log('\x1b[33m%s\x1b[0m', `Done:`, `changed ${counter} files for ${(+new Date() - time_0) / 1000}s\n`);
 /*eslint-enable*/
