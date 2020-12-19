@@ -8,7 +8,6 @@ import { Frame, Button, Link, convertHex, P } from '../ui-kit/styled-templates'
 import SinglePlayer from '../pages/single-player'
 import Multiplayer from '../pages/multiplayer'
 import HistoryPage from '../pages/history-page'
-import DocsPage from '../pages/docs-page'
 
 import useCurrentUser from '../../hooks/useCurrentUser'
 
@@ -21,13 +20,9 @@ let menu_items = [
         label: 'Multiplayer',
         link: '/multiplayer',
     },
-    // {
-    //     label: 'History',
-    //     link: '/history',
-    // },
     {
-        label: 'Docs',
-        link: '/docs',
+        label: 'History',
+        link: '/history',
     },
 ]
 
@@ -56,12 +51,12 @@ let UserApp = () => {
                     }
                 </Body>
                 <Body>
-                    {/* <MenuTitle>Players online</MenuTitle>
+                    <MenuTitle>Players online</MenuTitle>
                     {users.map((item, index) => {
                         return (
                             <MenuTitle key={index} >{item.username}</MenuTitle>
                         )
-                    })} */}
+                    })}
                 </Body>
                 <Footer>
                     <Button shaped background={convertHex(`#ffffff`, 0.3)} extra={`width: 220px !important;`} onClick={logOut} >Log out</Button>
@@ -71,8 +66,7 @@ let UserApp = () => {
                 <Switch>
                     <Route exact path={`/single_player`} component={SinglePlayer} />
                     <Route exact path={`/multiplayer`} component={Multiplayer} />
-                    {/* <Route exact path={`/history`} component={HistoryPage} /> */}
-                    <Route exact path={`/docs`} component={DocsPage} />
+                    <Route exact path={`/history`} component={HistoryPage} />
                 </Switch>
             </Workspace>
         </Wrapper>
@@ -84,7 +78,7 @@ const MenuTitle = styled(Frame)`
     align-items: flex-start;
     font-size: 12px;
     color: red;
-    color: ${props => props.theme.text.secondary} !important;
+    color: ${props => props.theme.text.secondary};
     margin: 10px 0 10px 15px;
 `;
 

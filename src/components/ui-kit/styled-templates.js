@@ -93,7 +93,7 @@ export const P = styled(Text)`
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 30px;
-    color: ${props => props.theme.text.secondary} !important;
+    color: ${props => props.theme.text.secondary};
     ${props => props.extra}
 
     @media only screen and (max-width: 600px) {
