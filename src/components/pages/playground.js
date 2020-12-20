@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useMappedState } from 'redux-react-hook'
+import { useLocation } from 'react-router-dom'
 
 import { Frame, Button, Link, convertHex } from '../ui-kit/styled-templates'
 import CommonHelper from '../../helpers/CommonHelper'
@@ -32,12 +33,13 @@ let win_line_coordinates = [
 
 let Playground = (props) => {
 
+    let path = useLocation().pathname
     let { game = {}, onChange = () => [] } = props
     let { config = [] } = game
 
     let { users } = useMappedState(useCallback((state) => ({ users: state.users.usersMap.toArray() }), []))
     let { currentUser } = useCurrentUser()
-    
+
     let active_player = config.filter(i => i !== `-`).length % 2
     let my_turn = game[`player_${active_player + 1}`] === currentUser.id
 
@@ -75,6 +77,10 @@ let Playground = (props) => {
                 <User active={active_player === 0} >{{ username: `bot`, ...users.get(game.player_1) }.username}</User>
                 <User active={active_player === 1} >{{ username: `bot`, ...users.get(game.player_2) }.username}</User>
                 <Frame extra={`color: white; font-size: 12px; opacity: 0.3;`} >Match ID: {game.id}</Frame>
+                <Button background={convertHex(`#ffffff`, 0.3)} extra={`width: 220px !important; margin: 15px 0;`} onClick={() => {
+                    CommonHelper.linkTo(`/`)
+                    setTimeout(() => { CommonHelper.linkTo(path) }, 200)
+                }} >New game</Button>
             </Frame>
         </Wrapper>
     )

@@ -51,7 +51,7 @@ let UserApp = () => {
     useEffect(() => {
         firebase.database().ref(`games`).on('value', (snapshot) => {
             let games = Object.values(snapshot.val() || [])
-            let invitation = games.filter(i => i.status === `waiting` && i.player_2 === currentUser.id)[0]
+            let invitation = games.filter(i => i.status === `waiting` && i.player_2 === currentUser.id && moment().diff(moment(+i.timestamp), `seconds`) <= 15)[0]
             if (invitation) {
                 customHandler(`OPEN_INVITE_POP_UP`, { invitor: invitation.player_1, game_id: invitation.id })
             }
